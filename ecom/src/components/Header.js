@@ -3,12 +3,15 @@ import Logo from './Logo'
 import {CiSearch} from "react-icons/ci";
 import {FaCartShopping} from 'react-icons/fa6';
 import {FaCircleUser} from 'react-icons/fa6';
+import { Link } from 'react-router-dom'
 const Header = () => {
   return (
-    <header className='h-20 shadow-md'>
+    <header className='h-20 shadow-md bg-white'>
         <div className='container mx-auto h-full flex items-center px-3 justify-between'>
         <div className="">
-            <Logo w={90} h={50}/>
+            <Link to={'/'}>
+              <Logo w={90} h={50}/>
+            </Link>
         </div>
         <div className='hidden lg:flex items-center w-full max-w-sm border rounded-full focus:shadow-md pl-1 '>
             <input type='text' placeholder='search product here...' className='w-full outline-none text-slate-700'/>
@@ -24,7 +27,8 @@ const Header = () => {
                   <p className='text-sm'>0</p>
                </div>
             </div>
-            <button className='px-3 py-1 bg-red-500 text-white rounded-full hover:opacity-90'>Login</button>
+          <Link to ={'/login'}  className='px-3 py-1 bg-red-500 text-white rounded-full hover:opacity-90'>Login
+          </Link>
        </div>
 
     </div>
