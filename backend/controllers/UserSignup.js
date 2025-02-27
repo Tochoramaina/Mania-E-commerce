@@ -1,6 +1,6 @@
 const userModels = require('../models/userModels.js');
 const bcrypt = require('bcryptjs');
-
+const jwt = require('jsonwebtoken')
 
 async function userSignUpController(req, res){
     try {
