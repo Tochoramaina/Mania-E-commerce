@@ -1,9 +1,12 @@
 import React, {useState} from 'react'
-import {Link} from 'react-router-dom'
+import {Link, useNavigate} from 'react-router-dom'
 import loginIcon from '../assest/signin.gif'
 import {FaEye} from 'react-icons/fa'
 import {FaEyeSlash} from 'react-icons/fa'
 import imageTobase64 from '../helpers/imageTobase64'
+import summaryApi from '../common'
+import {toast} from 'react-toastify'
+
 const SignUp = () => {
     const [showPassword, setShowpassword] = useState(false);
     const [showconfirmPassword, setShowconfirmPassword] = useState(false);
@@ -14,15 +17,36 @@ const SignUp = () => {
       password : '',
       confirmPassword : ''
     })
+    const navigate = useNavigate();
     const handleonChange = (e) => { 
       const {name, value} = e.target
       setData((prev) => {
         return{...prev, [name] : value}
     })
     }
-    const handleSubmit = (e) => {
-      e.preventDefault()
-    }
+    const handleSubmit = async (e) => {
+      e.preventDefault();
+      if(data.password === data.confirmPassword){
+        console.log("summaryApi.signUp.url", summaryApi.signUP.url)
+        const dataResponse = await fetch(summaryApi.signUP.url, {
+          method : summaryApi.signUP.method,
+          headers : {
+            'content-type' : 'application/json'
+          },
+          body : JSON.stringify(data)
+        })
+        const dataApi = await dataResponse.json()
+        if(dataApi.success){
+          toast.success(dataApi.message)
+          navigate('/login')
+        }
+        if(dataApi.error){
+          toast.error(dataApi.message)
+        }
+        }else{
+          console.log('Please check and confirm password')
+        }
+      }
     const handleUploadpic = async (e) => {
       const file = e.target.files[0]
       const imagePic = await imageTobase64(file)

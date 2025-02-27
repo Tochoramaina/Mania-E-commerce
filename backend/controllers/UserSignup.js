@@ -1,10 +1,14 @@
-const userModels = require('../models/userModels');
+const userModels = require('../models/userModels.js');
 const bcrypt = require('bcryptjs');
 
 
 async function userSignUpController(req, res){
     try {
-        const {email, password, name} = req.body;
+        const {email, password, name} = req.body;   
+        const user = await userModels.findOne({email})
+        if(user){
+            throw new Error('Already user exists.')
+        }
         if(!email){
             throw new Error('Please proveide Email')
         }
@@ -20,9 +24,9 @@ async function userSignUpController(req, res){
        if(!hashPassword){
         throw new error('Something is wrong!')
        }
-       const payload = {...req.body, password:hashPassword}
+       const payload = {...req.body, role: "GENERAL", password:[hashPassword]}
        const userData = new userModels(payload)
-       const saveUser = userData.save();
+       const saveUser = await userData.save();
        res.status(201).json({
         data : saveUser,
         success : true,
@@ -32,7 +36,7 @@ async function userSignUpController(req, res){
 
     } catch (err) {
         res.json({
-            message: err,
+            message:  err.message || err,
             error : true,
             success : false
         })
